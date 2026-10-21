@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COBIT 2019 – Componentes de los objetivos de gobierno y gestión</title>
+<style>
+:root{
+  --bg:#eef4fa; --surface:#ffffff; --ink:#1c2b3a; --muted:#5b6c7e; --line:#d6e3ef;
+  --accent:#2f86d1; --accent-ink:#1d5f99; --accent-soft:#e7f2fc; --accent-2:#a9d4f5;
+  --warn:#b54a3f; --warn-soft:#fbefed; --ok-soft:#ecf7f0; --ok:#2f7d4f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.deck{width:1280px;height:720px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:var(--surface);border-radius:14px;
+  box-shadow:0 10px 40px rgba(29,95,153,.12);padding:46px 60px 56px;display:none;overflow:hidden}
+.slide.active{display:flex;flex-direction:column}
+.slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:linear-gradient(var(--accent),var(--accent-2))}
+.foot{position:absolute;left:60px;right:60px;bottom:20px;display:flex;gap:18px;
+  font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+h1{font-size:40px;line-height:1.15;color:var(--ink);font-weight:700}
+h2{font-size:31px;font-weight:700;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:14px}
+h2 .num{font-size:15px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
+  border:1px solid var(--accent-2);border-radius:999px;padding:4px 12px;letter-spacing:.5px}
+.sub{color:var(--muted);font-size:17px;margin-bottom:18px}
+p,li{font-size:17.5px;line-height:1.45}
+ul.b{list-style:none}
+ul.b li{position:relative;padding-left:22px;margin:7px 0}
+ul.b li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.cite{color:var(--muted);font-size:.86em;white-space:nowrap}
+b,strong{color:var(--accent-ink)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1;min-height:0}
+.card{background:var(--accent-soft);border:1px solid var(--accent-2);border-radius:12px;padding:16px 18px}
+.card.plain{background:#f8fbfe;border-color:var(--line)}
+.card h4{font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent-ink);margin-bottom:6px}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th{background:var(--accent);color:#fff;text-align:left;padding:8px 10px;font-weight:600}
+td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#f6fafd}
+.note{font-size:15px;color:var(--muted);margin-top:10px}
+.terms{margin-top:12px;background:#f4f8fc;border:1px dashed var(--accent-2);border-radius:10px;padding:8px 14px;font-size:13.5px;line-height:1.45;color:var(--ink);display:flex;flex-wrap:wrap;gap:4px 18px;flex:none}
+.terms .lbl{width:100%;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent-ink)}
+.terms b{color:var(--accent-ink)}
+.levels{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;align-items:stretch;margin-top:14px}
+.levels .arrow{display:grid;place-items:center;color:var(--accent);font-size:28px;font-weight:700}
+.lv{border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:#f8fbfe;display:flex;flex-direction:column;gap:8px}
+.lv h3{font-size:20px;color:var(--accent-ink)}
+.lv .def{font-size:16.5px;line-height:1.45}
+.lv .ex{background:var(--accent-soft);border:1px solid var(--accent-2);border-radius:8px;padding:10px 12px;font-size:16px;line-height:1.45;flex:1}
+.lv .ex small{display:block;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent-ink);margin-bottom:4px}
+.lv ol{margin:2px 0 0 20px}.lv ol li{font-size:15.5px;line-height:1.4}
+.tipo{display:inline-block;border-radius:6px;padding:2px 9px;font-size:13.5px;font-weight:700}
+.tPol{background:var(--accent);color:#fff}.tProc{background:#fff3dc;color:#8a5a00;border:1px solid #f0d49b}
+.elems{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px;flex:1;min-height:0}
+.elems div{background:var(--accent-soft);border:1px solid var(--accent-2);border-radius:12px;padding:14px}
+.elems h3{font-size:17px;color:var(--accent-ink);margin-bottom:8px}
+.elems p{font-size:16px;line-height:1.45}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:6px 26px;margin-top:6px}
+.gloss p{font-size:14.8px;line-height:1.38;padding:5px 0;border-bottom:1px solid var(--line)}
+.gloss b{color:var(--accent-ink)}
+
+/* Portada */
+.cover{justify-content:space-between;padding:50px 70px 46px}
+.cover .inst{text-align:center;line-height:1.5}
+.cover .inst .u{font-size:22px;font-weight:700;letter-spacing:1px}
+.cover .inst .d{font-size:16px;color:var(--muted);letter-spacing:.6px}
+.cover .course{display:flex;justify-content:center;gap:40px;margin-top:14px;font-size:17px}
+.cover .course span{background:var(--accent-soft);border:1px solid var(--accent-2);border-radius:999px;padding:6px 18px}
+.cover .title{text-align:center}
+.cover .title .kicker{font-size:17px;color:var(--accent-ink);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.cover .title h1{font-size:46px}
+.cover .title .tag{margin-top:14px;font-size:18px;color:var(--muted)}
+.cover table{width:520px;margin:0 auto;font-size:17px}
+.band{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent-2),transparent);width:260px;margin:18px auto 0}
+
+/* Agenda */
+.agenda{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;margin-top:10px}
+.agenda div{display:flex;gap:16px;align-items:center;background:#f8fbfe;border:1px solid var(--line);border-radius:12px;padding:18px 20px;font-size:20px}
+.agenda div p{font-size:19px}
+.agenda span{flex:none;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+
+/* Diagrama 7 componentes */
+.wheel{position:relative;width:600px;height:540px;flex:none}
+.wheel svg{position:absolute;inset:0}
+.wheel .center{position:absolute;left:210px;top:190px;width:180px;height:160px;border-radius:50%;
+  background:var(--accent);color:#fff;display:grid;place-items:center;text-align:center;font-weight:700;font-size:19px;padding:20px}
+.wheel .node{position:absolute;width:160px;min-height:58px;margin:-29px 0 0 -80px;background:#fff;border:2px solid var(--accent-2);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14.5px;font-weight:600;padding:6px 8px;color:var(--ink)}
+.wheel .node i{font-style:normal;color:var(--accent-ink);margin-right:6px}
+
+/* Componentes: 5 bloques */
+.comp{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto 1fr;gap:14px;margin-top:6px;flex:1;min-height:0}
+.comp .q{border-radius:12px;padding:12px 15px;border:1px solid var(--line);background:#f8fbfe}
+.comp .q h4{font-size:13.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent-ink);margin-bottom:5px}
+.comp .q p,.comp .q li{font-size:17px;line-height:1.45}
+.comp .q ul.b li{margin:3px 0;padding-left:18px}
+.comp .q ul.b li::before{left:2px;width:7px;height:7px}
+.comp .case p,.comp .case li,.comp .miss p{font-size:19px;line-height:1.5}
+.comp .case ul.b li{margin:6px 0}
+.comp .case,.comp .miss{padding:16px 18px}
+.comp .case{grid-column:span 2;background:var(--accent-soft);border-color:var(--accent-2)}
+.comp .miss{background:var(--warn-soft);border-color:#f1cdc8}
+.comp .miss h4{color:var(--warn)}
+
+/* RACI */
+.raci td.l{text-align:center;font-weight:700}
+.chip{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;font-weight:700;font-size:15px}
+.cR{background:var(--accent);color:#fff}.cA{background:#1d5f99;color:#fff}.cC{background:var(--accent-2);color:var(--ink)}.cI{background:#edf1f5;color:var(--muted)}
+.legend{display:flex;gap:22px;margin-top:14px;font-size:15px;color:var(--muted);align-items:center}
+.legend span{display:flex;gap:8px;align-items:center}
+
+/* Flujo de información */
+.flow{display:grid;grid-template-columns:1fr 130px 1fr;gap:10px;align-items:center}
+.flow .col div{background:#fff;border:1px solid var(--accent-2);border-radius:8px;padding:7px 10px;font-size:15.5px;margin:6px 0}
+.flow .col small{color:var(--muted);font-weight:600;display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+.flow .hub{background:var(--accent);color:#fff;border-radius:12px;text-align:center;padding:16px 6px;font-weight:700;font-size:15px;position:relative}
+
+/* Cadena */
+.chain{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+.step{background:#f8fbfe;border:1px solid var(--line);border-radius:12px;padding:12px 14px;position:relative}
+.step .n{position:absolute;top:-11px;left:12px;background:var(--accent);color:#fff;border-radius:999px;font-size:12.5px;font-weight:700;padding:2px 10px}
+.step p{font-size:17px;margin-top:6px}
+.step .t{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:6px;padding:2px 8px}
+.result{margin-top:18px;background:var(--warn-soft);border:1px solid #f1cdc8;border-radius:12px;padding:14px 18px;font-size:17px}
+.result b{color:var(--warn)}
+
+/* Estadísticas */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.stat{background:var(--accent-soft);border:1px solid var(--accent-2);border-radius:12px;padding:16px;text-align:center}
+.stat .v{font-size:40px;font-weight:800;color:var(--accent-ink);line-height:1.1}
+.stat .k{font-size:15.5px;color:var(--muted);margin-top:4px}
+
+.big{font-size:30px;line-height:1.35;font-weight:600;text-align:center;max-width:980px;margin:0 auto}
+.refs p{font-size:14.5px;line-height:1.4;padding-left:36px;text-indent:-36px;margin:6px 0}
+.refs a{color:var(--accent-ink);word-break:break-all}
+
+/* Controles */
+.ctrl{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;z-index:5;font-size:13px;color:var(--muted)}
+.ctrl button{border:1px solid var(--accent-2);background:#fff;color:var(--accent-ink);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:14px}
+.ctrl button:hover{background:var(--accent-soft)}
+.bar{position:fixed;left:0;top:0;height:4px;background:var(--accent);transition:width .25s;z-index:5}
+@media print{
+  html,body{overflow:visible;background:#fff}
+  @page{size:1280px 720px;margin:0}
+  .stage{position:static;display:block}
+  .deck{transform:none!important;width:1280px;height:auto}
+  .slide{display:flex!important;flex-direction:column;position:relative;width:1280px;height:720px;border-radius:0;box-shadow:none;page-break-after:always;break-after:page}
+  .ctrl,.bar{display:none}
+}
+
+.slide:has(.terms) .comp .case p,.slide:has(.terms) .comp .case li,.slide:has(.terms) .comp .miss p{font-size:16.5px;line-height:1.42}
+.slide:has(.terms) .comp .case ul.b li{margin:3px 0}
+table.lg{font-size:17px} table.lg td{padding:10px 12px}
+.elems h3{font-size:19px}.elems p{font-size:18px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="stage"><div class="deck" id="deck">
+
+<!-- 1 Portada -->
+<section class="slide cover">
+  <div class="inst">
+    <div class="u">UNIVERSIDAD DE SAN CARLOS DE GUATEMALA</div>
+    <div class="d">DIVISIÓN DE CIENCIAS DE LA INGENIERÍA · ÁREA PROFESIONAL</div>
+    <div class="course"><span>Software Avanzado</span><span>Docente: Ing. Moisés Granados</span></div>
+  </div>
+  <div class="title">
+    <div class="kicker">COBIT 2019 · Tema 3.6</div>
+    <h1>Componentes de los objetivos<br>de gobierno y gestión</h1>
+    <div class="tag">Aplicado al objetivo BAI03: Identificación y construcción de soluciones gestionadas</div>
+    <div class="band"></div>
+  </div>
+  <table>
+    <tr><th>Carné</th><th>Nombre</th></tr>
+    <tr><td>201430801</td><td>Luis Basilio Baquiax Sic</td></tr>
+  </table>
+</section>
+
+<!-- 2 Agenda -->
+<section class="slide">
+  <h2>Agenda</h2>
+  <div class="agenda">
+    <div><span>1</span>Contexto: COBIT 2019 y sus 40 objetivos</div>
+    <div><span>2</span>Los siete componentes del sistema de gobierno</div>
+    <div><span>3</span>Caso hipotético: plataforma de inscripciones (BAI03)</div>
+    <div><span>4</span>Desarrollo de los componentes 3.6.1 a 3.6.7</div>
+    <div><span>5</span>Análisis práctico: los componentes como sistema</div>
+    <div><span>6</span>Caso real: Banco Nacional de Angola</div>
+    <div><span>7</span>Beneficios y dificultades de implementación</div>
+    <div><span>8</span>Conclusiones y reflexión final</div>
+  </div>
+</section>
+
+<!-- 3 Contexto -->
+<section class="slide">
+  <h2>Contexto: COBIT 2019</h2>
+  <p class="sub">Tema expuesto anteriormente; se resume solo como punto de partida.</p>
+  <div class="cols">
+    <div>
+      <ul class="b">
+        <li><b>COBIT</b> (<i>Control Objectives for Information and Related Technologies</i>) nació en 1996 como un conjunto de objetivos de control para auditores; con el tiempo se convirtió en un marco completo de gobierno y gestión <span class="cite">(White, 2023)</span>.</li>
+        <li>Hoy es el marco de ISACA para el gobierno y la gestión de la información y la tecnología <span class="cite">(ISACA, 2018a)</span>.</li>
+        <li>Publicado a finales de 2018 como sucesor de COBIT 5: pasa de 37 a 40 procesos, mide el desempeño con un esquema basado en CMMI e introduce factores de diseño y áreas de enfoque <span class="cite">(White, 2023)</span>.</li>
+        <li><b>Gobierno</b> (consejo de dirección): evalúa, dirige y supervisa.</li>
+        <li><b>Gestión</b> (dirección ejecutiva): planifica, construye, ejecuta y monitorea.</li>
+      </ul>
+    </div>
+    <div>
+      <table>
+        <tr><th>Dominio</th><th>Tipo</th><th>Objetivos</th></tr>
+        <tr><td><b>EDM</b> – Evaluar, Dirigir y Monitorear</td><td>Gobierno</td><td>5</td></tr>
+        <tr><td><b>APO</b> – Alinear, Planificar y Organizar</td><td>Gestión</td><td>14</td></tr>
+        <tr><td><b>BAI</b> – Construir, Adquirir e Implementar</td><td>Gestión</td><td>11</td></tr>
+        <tr><td><b>DSS</b> – Entregar, dar Servicio y Soporte</td><td>Gestión</td><td>6</td></tr>
+        <tr><td><b>MEA</b> – Monitorear, Evaluar y Valorar</td><td>Gestión</td><td>4</td></tr>
+      </table>
+      <p class="note">40 objetivos en total <span class="cite">(ISACA, 2018b)</span>.</p>
+    </div>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>ISACA</b> (Information Systems Audit and Control Association): asociación internacional de profesionales de auditoría, seguridad, riesgo y gobierno de TI; creadora de COBIT.</span><span><b>CMMI</b> (Capability Maturity Model Integration): modelo para medir la capacidad y madurez de los procesos.</span></div>
+</section>
+
+<!-- 4 Siete componentes -->
+<section class="slide">
+  <h2>Los siete componentes del sistema de gobierno</h2>
+  <div style="display:flex;gap:30px;align-items:center;flex:1;min-height:0">
+    <div style="flex:1">
+      <p style="font-size:21px;line-height:1.45;margin-bottom:16px">Ningún objetivo se logra solo con tecnología ni solo con procesos. Cada objetivo requiere <b>siete componentes</b> que funcionan de forma individual y colectiva <span class="cite">(Gomes, 2021)</span>.</p>
+      <div class="card"><h4>Cambio respecto a COBIT 5</h4><p>En COBIT 5 se llamaban <b>"habilitadores"</b>; en COBIT 2019 pasan a ser <b>componentes del sistema de gobierno</b> <span class="cite">(White, 2023)</span>.</p></div>
+      <div class="card plain" style="margin-top:12px"><h4>Genéricos o variantes</h4><p>Pueden aplicarse tal como los describe el modelo central o adaptarse a un contexto, como seguridad o DevOps <span class="cite">(Gomes, 2021)</span>.</p></div>
+    </div>
+    <div class="wheel" id="wheel">
+      <svg viewBox="0 0 600 540" id="wheelsvg"></svg>
+      <div class="center">Sistema de gobierno</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Caso -->
+<section class="slide">
+  <h2>Caso hipotético: la nueva plataforma de inscripciones</h2>
+  <p class="sub">Hilo conductor de toda la exposición. Caso ilustrativo: no describe una institución real.</p>
+  <div class="cols">
+    <div>
+      <ul class="b">
+        <li>Una <b>universidad guatemalteca</b> reemplaza su antiguo sistema por una plataforma web.</li>
+        <li>Permitirá a los estudiantes <b>asignarse cursos</b>, consultar su <b>estado de cuenta</b> y recibir su <b>constancia de inscripción</b>.</li>
+        <li>TI la desarrolla con un <b>equipo propio</b> y algunos <b>componentes de terceros</b>, como la pasarela de pago.</li>
+        <li>Pregunta guía: ¿qué necesita la universidad, en cada componente, para que la plataforma se construya bien?</li>
+      </ul>
+    </div>
+    <div class="card" style="align-self:start">
+      <h4>Objetivo de COBIT relacionado</h4>
+      <p style="font-size:24px;font-weight:700;color:var(--accent-ink);margin:4px 0 8px">BAI03 – Identificación y construcción de soluciones gestionadas</p>
+      <p>Dominio: Construir, Adquirir e Implementar. Propósito: establecer y mantener las soluciones que la organización necesita, cubriendo su <b>diseño, desarrollo, adquisición y alianzas</b> con proveedores <span class="cite">(ISACA, 2018b)</span>.</p>
+      <p style="margin-top:10px">En términos prácticos: el <b>ciclo de vida del desarrollo de software</b> visto desde el gobierno de TI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 Proceso -->
+<section class="slide">
+  <h2><span class="num">3.6.1</span>Definición de proceso</h2>
+  <div class="comp">
+    <div class="q"><h4>Qué es</h4><p>Conjunto organizado de prácticas y actividades que busca cumplir objetivos y producir resultados que apoyan las metas de TI <span class="cite">(Gomes, 2021)</span>. Es el componente más conocido.</p></div>
+    <div class="q"><h4>Función</h4><p>Convierte un objetivo abstracto en trabajo concreto, ordenado y verificable: qué se hace, en qué orden y qué resultado se espera.</p></div>
+    <div class="q"><h4>Elementos</h4><p>Propósito, metas, prácticas, actividades y métricas <span class="cite">(ISACA, 2018b)</span>.</p>
+      <ul class="b"><li><b>Práctica:</b> bloque grande de trabajo.</li><li><b>Actividad:</b> acción concreta.</li><li><b>Procedimiento:</b> cómo hacerla.</li></ul></div>
+    <div class="q case"><h4>En el caso</h4>
+      <p>BAI03 tiene <b>12 prácticas</b>: diseño, desarrollo, adquisición, construcción, calidad, pruebas, cambios, mantenimiento, catálogo y metodología <span class="cite">(ISACA, 2018b)</span>.</p>
+      <p style="margin-top:6px"><b>Capacidad:</b> cada actividad se asocia a un nivel de 0 (incompleto) a 5 (mejora continua), basado en CMMI. La capacidad se mide por proceso; la madurez, por área de enfoque <span class="cite">(ISACA, 2018a)</span>.</p>
+      <p style="margin-top:6px"><b>Indicadores:</b> defectos en producción, % de requisitos cubiertos por pruebas y retraso frente a la fecha planificada.</p></div>
+    <div class="q miss"><h4>Si falta</h4><p>Cada programador trabaja a su manera, se omiten las pruebas cuando apremia el tiempo, los cambios llegan sin control y nadie puede demostrar que la plataforma se construyó bien. El riesgo visible: que falle el primer día de inscripciones.</p></div>
+  </div>
+</section>
+
+<!-- 6b Ejemplos práctica/actividad/procedimiento -->
+<section class="slide">
+  <h2><span class="num">3.6.1</span>Práctica, actividad y procedimiento en el caso</h2>
+  <p class="sub">Tres ejemplos de la plataforma de inscripciones, de lo general a lo detallado.</p>
+  <table class="lg">
+    <tr><th style="width:24%">Práctica de BAI03<br><span style="font-weight:400;font-size:13px">bloque de trabajo</span></th><th style="width:30%">Actividad<br><span style="font-weight:400;font-size:13px">acción concreta</span></th><th>Procedimiento<br><span style="font-weight:400;font-size:13px">cómo se hace, paso a paso</span></th></tr>
+    <tr><td><b>BAI03.06</b> Realizar el aseguramiento de la calidad</td><td>Revisar el código del módulo de asignación de cursos antes de integrarlo.</td><td>El programador abre una solicitud de cambio (<i>pull request</i>); un revisor verifica los estándares y las pruebas; la aprueba o la devuelve con comentarios.</td></tr>
+    <tr><td><b>BAI03.08</b> Ejecutar las pruebas</td><td>Probar que la plataforma impida inscribir un curso sin cumplir el prerrequisito.</td><td>Preparar datos ficticios, ejecutar el caso en el ambiente de pruebas, comparar con el resultado esperado y registrar el defecto en Jira si falla.</td></tr>
+    <tr><td><b>BAI03.09</b> Gestionar cambios a los requisitos</td><td>Evaluar el impacto de una nueva regla académica aprobada a mitad del desarrollo.</td><td>Control Académico llena el formulario de solicitud de cambio, TI estima el impacto en tiempo y módulos, y el director de TI lo aprueba o rechaza.</td></tr>
+  </table>
+  <p class="note">El procedimiento pertenece al componente 3.6.5 (políticas y procedimientos): así se ve cómo un componente depende de otro.</p>
+</section>
+
+<!-- 7 Prácticas BAI03 -->
+<section class="slide">
+  <h2><span class="num">3.6.1</span>Las 12 prácticas de BAI03 en la plataforma</h2>
+  <table style="margin-top:8px">
+    <tr><th style="width:38%">Prácticas de gestión</th><th>En la plataforma de inscripciones</th></tr>
+    <tr><td><b>BAI03.01–02</b> Diseñar soluciones de alto nivel y componentes detallados</td><td>Arquitectura web, base de datos y conexión con pagos; pantallas, modelo de datos de cursos y reglas de prerrequisitos</td></tr>
+    <tr><td><b>BAI03.03–05</b> Desarrollar, adquirir y construir</td><td>Programar los módulos de asignación, estado de cuenta y constancias; decidir sobre la pasarela de pago; integrar todo</td></tr>
+    <tr><td><b>BAI03.06</b> Aseguramiento de la calidad</td><td>Revisar el código y verificar los estándares de desarrollo</td></tr>
+    <tr><td><b>BAI03.07–08</b> Preparar y ejecutar pruebas</td><td>Casos como "inscribir un curso sin cumplir el prerrequisito"; pruebas con Control Académico antes del período de inscripción</td></tr>
+    <tr><td><b>BAI03.09</b> Gestionar cambios a los requisitos</td><td>Evaluar una nueva regla académica aprobada a mitad del desarrollo</td></tr>
+    <tr><td><b>BAI03.10–11</b> Mantener y definir servicios</td><td>Corregir errores tras el lanzamiento y registrar la plataforma en el catálogo de servicios de TI</td></tr>
+    <tr><td><b>BAI03.12</b> Diseñar según la metodología definida</td><td>Trabajar con la metodología oficial, por ejemplo Scrum</td></tr>
+  </table>
+</section>
+
+<!-- 8 Estructuras -->
+<section class="slide">
+  <h2><span class="num">3.6.2</span>Estructuras organizativas</h2>
+  <div class="comp">
+    <div class="q"><h4>Qué es</h4><p>Las principales entidades que toman decisiones y la forma en que se dividen, organizan y coordinan las actividades <span class="cite">(Gomes, 2021)</span>.</p></div>
+    <div class="q"><h4>Función</h4><p>Definir quién decide, quién ejecuta y quién responde por los resultados. Sin esta claridad, las decisiones se duplican, se contradicen o no se toman.</p></div>
+    <div class="q"><h4>Elementos</h4><p>Consejo de dirección, comités, CIO, jefes de área y dueños de procesos de negocio. Una buena estructura define mandato, autoridad, delegación y escalamiento.</p></div>
+    <div class="q case"><h4>En el caso</h4><p>COBIT expresa este componente con una <b>matriz RACI por práctica</b> <span class="cite">(ISACA, 2018b)</span>; no es un complemento, es la forma oficial de describirlo.</p>
+      <p style="margin-top:6px">El <b>jefe de Control Académico</b> actúa como dueño del proceso de negocio: se le consulta en el diseño y en las pruebas. En una universidad pequeña, una persona puede tener varios roles, pero quien desarrolla un módulo no debería aprobarlo en control de calidad.</p></div>
+    <div class="q miss"><h4>Si falta</h4><p>Nadie aprueba el diseño a tiempo, los cambios se autorizan informalmente y, cuando la plataforma falla, cada área culpa a otra. Sin Control Académico, la solución puede ser técnicamente correcta pero no respetar las reglas académicas.</p></div>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>CIO</b> (Chief Information Officer): director de TI.</span><span><b>Dueño del proceso de negocio</b> persona del área usuaria que responde por el proceso; aquí, el jefe de Control Académico.</span></div>
+</section>
+
+<!-- 9 RACI -->
+<section class="slide">
+  <h2><span class="num">3.6.2</span>Matriz RACI en el caso</h2>
+  <p class="sub">Ejemplo ilustrativo; los cargos dependen de cada institución.</p>
+  <table class="raci">
+    <tr><th>Práctica</th><th>Director de TI</th><th>Jefe de desarrollo</th><th>Arquitecto de software</th><th>Jefe de Control Académico</th><th>Líder de QA</th></tr>
+    <tr><td>BAI03.01 Diseñar soluciones de alto nivel</td><td class="l"><span class="chip cA">A</span></td><td class="l"><span class="chip cR">R</span></td><td class="l"><span class="chip cR">R</span></td><td class="l"><span class="chip cC">C</span></td><td class="l"><span class="chip cI">I</span></td></tr>
+    <tr><td>BAI03.03 Desarrollar componentes</td><td class="l"><span class="chip cA">A</span></td><td class="l"><span class="chip cR">R</span></td><td class="l"><span class="chip cC">C</span></td><td class="l"><span class="chip cI">I</span></td><td class="l"><span class="chip cI">I</span></td></tr>
+    <tr><td>BAI03.06 Aseguramiento de calidad</td><td class="l"><span class="chip cA">A</span></td><td class="l"><span class="chip cC">C</span></td><td class="l"><span class="chip cI">I</span></td><td class="l"><span class="chip cI">I</span></td><td class="l"><span class="chip cR">R</span></td></tr>
+    <tr><td>BAI03.08 Ejecutar pruebas</td><td class="l"><span class="chip cA">A</span></td><td class="l"><span class="chip cR">R</span></td><td class="l"><span class="chip cI">I</span></td><td class="l"><span class="chip cC">C</span></td><td class="l"><span class="chip cR">R</span></td></tr>
+  </table>
+  <div class="legend">
+    <span><i class="chip cR">R</i>Responsible: ejecuta</span>
+    <span><i class="chip cA">A</i>Accountable: rinde cuentas (solo uno)</span>
+    <span><i class="chip cC">C</i>Consulted: opina antes</span>
+    <span><i class="chip cI">I</i>Informed: recibe el resultado</span>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>QA</b> (Quality Assurance): aseguramiento de la calidad; el líder de QA define la estrategia de pruebas y responde por la calidad.</span></div>
+</section>
+
+<!-- 10 Información -->
+<section class="slide">
+  <h2><span class="num">3.6.3</span>Flujos y elementos de información</h2>
+  <div class="comp">
+    <div class="q"><h4>Qué es</h4><p>La información que se produce, usa e intercambia, junto con sus fuentes, destinatarios y procesos asociados <span class="cite">(Gomes, 2021; ISACA, 2018b)</span>.</p></div>
+    <div class="q"><h4>Función</h4><p>Que las decisiones se tomen con datos confiables y que la salida de un proceso alimente bien al siguiente. Importa que llegue a quien la necesita, a tiempo.</p></div>
+    <div class="q"><h4>Elementos</h4><p>Entradas y salidas de cada práctica. Calidad: <b>integridad, disponibilidad, confidencialidad</b> y <b>trazabilidad</b>.</p></div>
+    <div class="q case"><h4>En el caso</h4>
+      <div class="flow">
+        <div class="col"><small>Entradas</small><div>Requisitos aprobados · BAI02</div><div>Estándares de arquitectura · APO03</div><div>Plan y fechas del proyecto · BAI11</div></div>
+        <div class="hub">BAI03<br><span style="font-weight:400;font-size:13px">plataforma</span></div>
+        <div class="col"><small>Salidas</small><div>Diseño y componentes · BAI10</div><div>Resultados de pruebas · BAI07</div><div>Solicitudes de cambio · BAI06</div></div>
+      </div>
+      <p style="margin-top:8px">Las pruebas usan datos ficticios o anonimizados, no copias de producción.</p></div>
+    <div class="q miss"><h4>Si falta</h4><p>Una regla académica no comunicada produce inscripciones inválidas; si los resultados de pruebas no llegan a quien autoriza, se publican errores conocidos; con datos reales sin control, hay riesgo de filtración.</p></div>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>BAI02</b> Definición de requisitos gestionada.</span><span><b>APO03</b> Arquitectura empresarial gestionada.</span><span><b>BAI11</b> Proyectos gestionados.</span><span><b>BAI10</b> Configuración gestionada.</span><span><b>BAI07</b> Aceptación y transición de cambios de TI.</span><span><b>BAI06</b> Cambios de TI gestionados.</span></div>
+</section>
+
+<!-- 11 Personas -->
+<section class="slide">
+  <h2><span class="num">3.6.4</span>Personas, habilidades y competencias</h2>
+  <div class="comp">
+    <div class="q"><h4>Qué es</h4><p>El factor humano: las personas y sus habilidades son necesarias para decidir, corregir y completar las actividades <span class="cite">(Gomes, 2021)</span>.</p></div>
+    <div class="q"><h4>Función</h4><p>Que existan personas capaces de ejecutar el proceso, ocupar los roles de la estructura y usar las herramientas.</p></div>
+    <div class="q"><h4>Elementos</h4><p>Conocimientos técnicos, comunicación, brechas de competencias y formación continua. COBIT las relaciona con <b>SFIA</b> y <b>e-CF</b> <span class="cite">(ISACA, 2018b)</span>; se gestionan con APO07.</p></div>
+    <div class="q case"><h4>En el caso</h4><p>SFIA sugiere <b>21 habilidades</b> para BAI03 <span class="cite">(SFIA Foundation, 2020)</span>. Las clave para la plataforma:</p>
+      <ul class="b"><li><b>Diseño</b> (ARCH, DESN, DBDS): arquitecto de software.</li><li><b>Construcción</b> (PROG, SINT): equipo de desarrollo.</li><li><b>Calidad</b> (TEST, BPTS, QUAS): líder y analistas de QA, y usuarios de Control Académico.</li><li><b>Entrega y seguridad</b> (DLMG, RELM, SCTY): jefe de desarrollo y responsable de seguridad.</li></ul></div>
+    <div class="q miss"><h4>Si falta</h4><p>Sin desarrollo seguro, la plataforma queda expuesta; si nadie domina las pruebas, los errores llegan a producción; sin capacitar a Control Académico y estudiantes, la mesa de ayuda se satura el primer día.</p></div>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>SFIA</b> (Skills Framework for the Information Age): catálogo internacional de habilidades de TI con códigos como PROG o TEST.</span><span><b>e-CF</b> (European e-Competence Framework): marco europeo de competencias de TI.</span><span><b>APO07</b> Recursos humanos gestionados.</span></div>
+</section>
+
+<!-- 12 Políticas A -->
+<section class="slide">
+  <h2><span class="num">3.6.5</span>Políticas y procedimientos</h2>
+  <div class="duo">
+    <div class="card plain"><h4>Qué es</h4><p>Su nombre oficial es <b>"Principios, políticas y procedimientos"</b> <span class="cite">(ISACA, 2018a)</span>. Traducen el comportamiento deseado en una guía práctica para el día a día <span class="cite">(Gomes, 2021)</span>.</p></div>
+    <div class="card plain"><h4>Función</h4><p>Establecer reglas claras y obligatorias, y explicar cómo cumplirlas. Ciclo de vida: elaborar, aprobar, comunicar, supervisar y revisar. Se alinean con leyes y normas como ISO/IEC 27001 <span class="cite">(White, 2023)</span>.</p></div>
+  </div>
+  <div class="levels">
+    <div class="lv"><h3>Principio</h3><p class="def">Un valor general que orienta las decisiones.</p>
+      <div class="ex"><small>En el caso</small>"La seguridad y la calidad se consideran desde el diseño de la plataforma."</div></div>
+    <div class="arrow">→</div>
+    <div class="lv"><h3>Política</h3><p class="def">Una regla de cumplimiento obligatorio que indica <b>qué</b> debe hacerse y quién responde.</p>
+      <div class="ex"><small>En el caso</small>"Ningún cambio llega a producción sin revisión de código y pruebas aprobadas. Responde el líder de QA."</div></div>
+    <div class="arrow">→</div>
+    <div class="lv"><h3>Procedimiento</h3><p class="def">La instrucción paso a paso que explica <b>cómo</b> cumplir la política.</p>
+      <div class="ex"><small>En el caso</small><ol><li>Abrir una solicitud de cambio.</li><li>Un revisor aprueba el código.</li><li>CI/CD ejecuta las pruebas.</li><li>El líder de QA autoriza el despliegue.</li></ol></div></div>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>ISO/IEC 27001</b> norma internacional para sistemas de gestión de seguridad de la información.</span></div>
+</section>
+
+<!-- 12 Políticas B -->
+<section class="slide">
+  <h2><span class="num">3.6.5</span>Políticas y procedimientos de la plataforma</h2>
+  <table class="lg" style="margin-top:6px">
+    <tr><th style="width:16%">Tipo</th><th style="width:27%">Nombre</th><th>Qué establece</th></tr>
+    <tr><td><span class="tipo tPol">Política</span></td><td><b>Desarrollo de software</b></td><td>Metodología obligatoria, separación de ambientes y control de versiones</td></tr>
+    <tr><td><span class="tipo tPol">Política</span></td><td><b>Desarrollo seguro</b></td><td>Revisión de seguridad del código y control de librerías de terceros</td></tr>
+    <tr><td><span class="tipo tPol">Política</span></td><td><b>Calidad y pruebas</b></td><td>Pruebas mínimas y criterios de aceptación antes de publicar</td></tr>
+    <tr><td><span class="tipo tPol">Política</span></td><td><b>Adquisición de componentes</b></td><td>Cuándo comprar o usar código abierto, y cómo evaluar licencias</td></tr>
+    <tr><td><span class="tipo tProc">Procedimiento</span></td><td><b>Revisión de código</b></td><td>Revisores mínimos, verificaciones automáticas y aprobación de cada cambio</td></tr>
+    <tr><td><span class="tipo tProc">Procedimiento</span></td><td><b>Cambios a requisitos</b></td><td>Cómo se registra, evalúa y aprueba una nueva regla académica</td></tr>
+  </table>
+  <div class="duo" style="margin-top:16px">
+    <div class="card"><h4>Cómo distinguirlos</h4><p>Si dice <b>qué</b> debe cumplirse y es obligatorio, es una <b>política</b>. Si describe los <b>pasos</b> para cumplirla, es un <b>procedimiento</b>. El cumplimiento se verifica con controles, por ejemplo revisar cada mes que ningún cambio llegó a producción sin revisión.</p></div>
+    <div class="card" style="background:var(--warn-soft);border-color:#f1cdc8"><h4 style="color:var(--warn)">Si falta</h4><p>Cada desarrollador decide qué tan bien probar. Y una política que no se comunica, no se aplica ni se supervisa solo genera una falsa sensación de control.</p></div>
+  </div>
+</section>
+
+<!-- 13 Cultura A -->
+<section class="slide">
+  <h2><span class="num">3.6.6</span>Cultura, ética y comportamiento</h2>
+  <div class="duo">
+    <div class="card plain"><h4>Qué es</h4><p>El conjunto de valores, actitudes y conductas de las personas y de la organización frente a la tecnología y la información. Suele subestimarse como factor de éxito del gobierno y la gestión <span class="cite">(Gomes, 2021)</span>.</p></div>
+    <div class="card plain"><h4>Función</h4><p>Decide si los demás componentes se aplican en la práctica o se quedan en el papel. Si las personas temen reportar un error, ocultan incidentes o buscan cómo eludir los controles.</p></div>
+  </div>
+  <p style="margin-top:14px;font-size:16px;color:var(--muted)"><b>Elementos:</b> para cada objetivo, COBIT 2019 describe los comportamientos deseados que lo favorecen <span class="cite">(ISACA, 2018b)</span>. La cultura se construye con:</p>
+  <div class="elems">
+    <div><h3>Liderazgo y ejemplo de la dirección</h3><p>Si los directivos ignoran las políticas, el resto del personal tampoco las tomará en serio.</p></div>
+    <div><h3>Ética profesional</h3><p>Actuar con integridad aun cuando nadie supervisa.</p></div>
+    <div><h3>Comunicación</h3><p>Explicar el porqué de las reglas, no solo imponerlas.</p></div>
+    <div><h3>Incentivos y consecuencias</h3><p>Reconocer las conductas correctas y corregir las incorrectas con coherencia.</p></div>
+    <div><h3>Concientización continua</h3><p>Del personal y de los usuarios, no una sola capacitación aislada.</p></div>
+  </div>
+</section>
+
+<!-- 13 Cultura B -->
+<section class="slide">
+  <h2><span class="num">3.6.6</span>Cultura en la construcción de la plataforma</h2>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;margin-top:8px">
+    <div class="card">
+      <h4>En el caso: comportamientos que necesita la universidad</h4>
+      <ul class="b">
+        <li><b>Calidad antes que prisa:</b> el equipo no se salta las pruebas para cumplir la fecha de inscripciones.</li>
+        <li><b>Transparencia ante los errores:</b> un desarrollador que descubre un fallo lo reporta, aunque sea suyo.</li>
+        <li><b>Colaboración con el negocio:</b> Control Académico participa durante todo el proyecto, no solo al final.</li>
+        <li><b>Ética en el uso de los datos:</b> nadie consulta información de estudiantes sin necesidad y se respetan las licencias de software.</li>
+        <li><b>Seguridad:</b> quien recibe un correo fraudulento que pide credenciales del repositorio lo identifica y lo reporta.</li>
+      </ul>
+    </div>
+    <div class="card" style="background:var(--warn-soft);border-color:#f1cdc8">
+      <h4 style="color:var(--warn)">Si falta</h4>
+      <p>La dirección presiona para lanzar la plataforma a tiempo "como sea". Aunque exista una política de pruebas, el equipo entiende que lo que de verdad se premia es la velocidad, y publica sin probar.</p>
+      <p style="margin-top:10px">El día de inscripciones aparecen errores que todos sospechaban, pero que nadie se atrevió a reportar.</p>
+      <p style="margin-top:10px"><b style="color:var(--warn)">La cultura puede anular en la práctica a todos los demás componentes.</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 Servicios -->
+<section class="slide">
+  <h2><span class="num">3.6.7</span>Servicios, infraestructura y aplicaciones</h2>
+  <div class="comp">
+    <div class="q"><h4>Qué es</h4><p>Los recursos que soportan el gobierno y la gestión de TI: <b>herramientas de gestión</b> y <b>servicios e infraestructura</b> de los que depende el objetivo, incluidos los de terceros <span class="cite">(Gomes, 2021; Rafeq y Elangovan, 2021)</span>.</p></div>
+    <div class="q"><h4>Función</h4><p>Hacer posible, automatizar y dejar evidencia del trabajo de los demás componentes.</p></div>
+    <div class="q"><h4>Elementos</h4><p>Servidores, redes, nube, bases de datos, mesas de servicio y monitoreo. Pueden ser internos, contratados o en la nube, según los factores de diseño <span class="cite">(ISACA, 2018a)</span>.</p></div>
+    <div class="q case"><h4>En el caso</h4>
+      <ul class="b"><li><b>Gestión del trabajo y código:</b> Jira o GitHub Issues; Git con GitHub o GitLab.</li><li><b>CI/CD y calidad:</b> GitHub Actions o Jenkins; SonarQube; JUnit, Selenium, Postman.</li><li><b>Ambientes:</b> desarrollo, pruebas y preproducción separados con Docker o nube.</li><li><b>Operación:</b> servidores, base de datos, respaldos y monitoreo; condiciones del proveedor en la nube.</li></ul>
+      <p style="margin-top:4px">El historial de CI/CD es la evidencia que revisaría una auditoría de BAI03.</p></div>
+    <div class="q miss"><h4>Si falta</h4><p>Sin control de versiones se pierde código; sin ambiente de pruebas se prueba en producción con datos reales; sin pruebas automatizadas, cada corrección puede romper algo que funcionaba.</p></div>
+  </div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>CI/CD</b> integración y entrega continuas: compilación, pruebas y despliegue automatizados.</span><span><b>GRC</b> gobierno, riesgo y cumplimiento; tipo de herramienta de gestión.</span></div>
+</section>
+
+<!-- 15 Cadena -->
+<section class="slide">
+  <h2>Análisis: el primer día de inscripciones</h2>
+  <p class="sub">En la realidad, los fallos casi nunca vienen de un solo componente, sino de una cadena.</p>
+  <div class="chain">
+    <div class="step"><span class="n">1</span><p>Una nueva regla de prerrequisitos llega por correo a un solo programador, sin registrarse como cambio formal.</p><span class="t">Información y proceso</span></div>
+    <div class="step"><span class="n">2</span><p>No está claro quién aprueba los cambios, así que nadie evalúa su impacto.</p><span class="t">Estructuras organizativas</span></div>
+    <div class="step"><span class="n">3</span><p>El programador la implementa rápido, pero no domina las pruebas automatizadas.</p><span class="t">Personas</span></div>
+    <div class="step"><span class="n">4</span><p>La política de pruebas existe, pero nadie verifica que se cumpla.</p><span class="t">Políticas</span></div>
+    <div class="step"><span class="n">5</span><p>La dirección presiona para lanzar a tiempo y se publica sin probar el cambio.</p><span class="t">Cultura</span></div>
+    <div class="step"><span class="n">6</span><p>No hay preproducción idéntica a producción: el error no aparece antes del lanzamiento.</p><span class="t">Herramientas</span></div>
+  </div>
+  <div class="result"><b>Resultado:</b> cientos de estudiantes no pueden asignarse cursos que sí les corresponden. Ningún componente lo causó por sí solo; fue la suma de pequeñas debilidades en todos.</div>
+</section>
+
+<!-- 16 Señales -->
+<section class="slide">
+  <h2>Señales de alerta y mejoras propuestas</h2>
+  <table style="margin-top:8px">
+    <tr><th>Componente</th><th>Señal de alerta en el caso</th><th>Mejora propuesta</th></tr>
+    <tr><td><b>Proceso</b></td><td>Los cambios de requisitos llegan por correo informal</td><td>Aplicar BAI03.09: registrar y evaluar cada cambio</td></tr>
+    <tr><td><b>Estructuras</b></td><td>Nadie sabe quién aprueba un cambio</td><td>Publicar la matriz RACI y designar un aprobador</td></tr>
+    <tr><td><b>Información</b></td><td>Control Académico y TI tienen versiones distintas de las reglas</td><td>Un único documento de requisitos versionado</td></tr>
+    <tr><td><b>Personas</b></td><td>El equipo no domina las pruebas automatizadas</td><td>Capacitar y asignar un líder de QA</td></tr>
+    <tr><td><b>Políticas</b></td><td>La política de pruebas no se verifica</td><td>Bloquear en CI/CD los cambios que no pasen las pruebas</td></tr>
+    <tr><td><b>Cultura</b></td><td>Se premia la fecha por encima de la calidad</td><td>La dirección respalda retrasar un lanzamiento con errores</td></tr>
+    <tr><td><b>Herramientas</b></td><td>No existe un ambiente de preproducción</td><td>Crear preproducción con datos anonimizados</td></tr>
+  </table>
+  <p class="note">Cada mejora refuerza a las demás: el bloqueo en CI/CD es una herramienta, pero también hace cumplir la política y reduce la presión cultural.</p>
+</section>
+
+<!-- 17 Angola -->
+<section class="slide">
+  <h2>Caso real: Banco Nacional de Angola</h2>
+  <p class="sub">Soares (2023), ISACA Journal</p>
+  <ul class="b">
+    <li>En <b>2019</b> inició un programa para mejorar el gobierno y la gestión de su información y tecnología con base en COBIT 2019, impulsado por las directrices de la Comunidad de Desarrollo de África Austral (SADC).</li>
+    <li>Creó un <b>repositorio para documentar cada uno de los siete componentes</b>.</li>
+    <li>Avanzó en <b>tres horizontes</b>: primero los procesos y después el resto de los componentes, hasta una visión integral.</li>
+  </ul>
+  <div class="stats">
+    <div class="stat"><div class="v">~60</div><div class="k">personas capacitadas en COBIT 2019</div></div>
+    <div class="stat"><div class="v">17</div><div class="k">procesos evaluados en capacidad</div></div>
+    <div class="stat"><div class="v">~300</div><div class="k">oportunidades de mejora identificadas</div></div>
+    <div class="stat"><div class="v">15</div><div class="k">iniciativas de mejora definidas</div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><p><b>Lección:</b> el gobierno de TI es responsabilidad de toda la organización, no solo del departamento de informática. El artículo no mide el efecto de cada componente por separado.</p></div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>SADC</b> (Southern African Development Community): Comunidad de Desarrollo de África Austral.</span></div>
+</section>
+
+<!-- 18 Beneficios -->
+<section class="slide">
+  <h2>Beneficios y dificultades de implementación</h2>
+  <div class="cols" style="margin-top:8px">
+    <div class="card" style="background:var(--ok-soft);border-color:#cfe8d8">
+      <h4 style="color:var(--ok)">Beneficios</h4>
+      <ul class="b"><li>Mejor control de la TI: soluciones ordenadas y verificables.</li><li>Responsabilidades claras.</li><li>Información confiable para decidir.</li><li>Gestión de riesgos: errores detectados antes de producción.</li><li>Uso eficiente de los recursos.</li><li>Alineación con ITIL, CMMI y TOGAF <span class="cite">(White, 2023)</span>.</li></ul>
+    </div>
+    <div class="card" style="background:var(--warn-soft);border-color:#f1cdc8">
+      <h4 style="color:var(--warn)">Dificultades</h4>
+      <ul class="b"><li>Resistencia al cambio: los controles se ven como burocracia.</li><li>Falta de capacitación.</li><li>Recursos limitados en organizaciones pequeñas.</li><li>Políticas que no se cumplen.</li><li>Querer aplicar los 40 objetivos a la vez.</li></ul>
+    </div>
+  </div>
+  <div class="card plain" style="margin-top:16px"><p><b>Respuesta de COBIT:</b> adaptar el sistema de gobierno a cada organización, determinar y refinar su alcance y priorizar <span class="cite">(ISACA, 2018c)</span>. Para la universidad: empezar por BAI03 y medir el avance con los niveles de capacidad.</p></div>
+  <div class="terms"><span class="lbl">Siglas y términos</span><span><b>ITIL</b> (Information Technology Infrastructure Library): buenas prácticas de gestión de servicios de TI.</span><span><b>TOGAF</b> (The Open Group Architecture Framework): marco de arquitectura empresarial.</span></div>
+</section>
+
+<!-- 19 Conclusiones -->
+<section class="slide">
+  <h2>Conclusiones</h2>
+  <div class="agenda" style="grid-template-columns:1fr 1fr;margin-top:6px">
+    <div style="align-items:flex-start"><span>1</span><p>Los siete componentes forman un <b>sistema</b>: la debilidad de uno puede anular el esfuerzo de los demás.</p></div>
+    <div style="align-items:flex-start"><span>2</span><p>Construir software de calidad no es solo un asunto técnico, sino también de <b>gobierno</b>.</p></div>
+    <div style="align-items:flex-start"><span>3</span><p>De "habilitadores" a "componentes": el foco ya no está <b>solo en los procesos</b>, sino en todo lo que los rodea.</p></div>
+    <div style="align-items:flex-start"><span>4</span><p>COBIT se <b>adapta</b>: se prioriza, no se implementa todo de una vez.</p></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h4>Recomendaciones</h4>
+    <p>Empezar por la matriz RACI · automatizar el cumplimiento de políticas en CI/CD · involucrar a Control Académico desde el diseño · medir con niveles de capacidad e indicadores · trabajar la cultura desde la dirección.</p></div>
+</section>
+
+<!-- 20 Reflexión -->
+<section class="slide" style="justify-content:center">
+  <p style="text-align:center;font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--accent-ink);font-weight:700;margin-bottom:22px">Para reflexionar</p>
+  <p class="big">¿Puede una organización alcanzar un buen gobierno de TI si tiene tecnología avanzada, pero carece de procesos, personal capacitado y políticas aplicadas?</p>
+  <div class="band" style="margin:28px auto"></div>
+  <p style="text-align:center;font-size:20px;color:var(--muted)">La tecnología es solo uno de siete componentes, y su valor depende de los otros seis.</p>
+  <p style="text-align:center;font-size:30px;font-weight:700;margin-top:34px;color:var(--accent-ink)">¡Gracias! ¿Preguntas?</p>
+</section>
+
+<!-- Glosario -->
+<section class="slide">
+  <h2>Glosario</h2>
+  <p class="sub" style="margin-bottom:6px">Términos generales usados en la exposición; las siglas específicas se explican en cada diapositiva.</p>
+  <div class="gloss"><p><b>Gobierno de TI:</b> evaluar, dirigir y supervisar el uso de la tecnología; lo ejerce el consejo de dirección.</p><p><b>Gestión de TI:</b> planificar, construir, ejecutar y monitorear según la dirección fijada; la ejerce la dirección ejecutiva.</p><p><b>TI / I&T:</b> tecnologías de la información; COBIT 2019 usa "información y tecnología" (I&T).</p><p><b>Objetivo de gobierno y gestión:</b> resultado que la organización busca lograr; COBIT 2019 define 40.</p><p><b>Componente (antes "habilitador"):</b> cada uno de los siete elementos que, en conjunto, hacen posible un objetivo.</p><p><b>Nivel de capacidad:</b> qué tan bien se ejecuta un proceso, en una escala de 0 a 5.</p><p><b>Madurez:</b> nivel alcanzado por un área de enfoque completa, no por un solo proceso.</p><p><b>Área de enfoque:</b> tema específico de gobierno, como ciberseguridad o DevOps.</p><p><b>Factores de diseño:</b> características de la organización (tamaño, riesgos, modelo de TI) que definen cómo adaptar COBIT.</p><p><b>Cascada de metas:</b> relación entre metas de la empresa, metas de alineamiento y objetivos de COBIT.</p><p><b>Control de versiones (Git):</b> registro de cada cambio en el código, que permite revisarlo o revertirlo.</p><p><b>Ambiente de preproducción:</b> copia del entorno real donde se prueba antes de publicar.</p><p><b>Análisis estático:</b> revisión automática del código sin ejecutarlo, por ejemplo con SonarQube.</p><p><b>Scrum:</b> metodología ágil de desarrollo por iteraciones cortas (sprints).</p><p><b>Pasarela de pago:</b> servicio externo que procesa los pagos en línea.</p><p><b>Datos anonimizados:</b> datos sin la información que identifica a las personas.</p></div>
+</section>
+
+<!-- 21 Referencias -->
+<section class="slide refs">
+  <h2>Referencias</h2>
+  <div style="margin-top:4px">
+    <p>Gomes, S. (2021, 28 de agosto). <i>Componentes do COBIT (2019)</i>. Blog Gran Cursos Online. <a href="https://blog.grancursosonline.com.br/componentes-do-cobit-2019/">https://blog.grancursosonline.com.br/componentes-do-cobit-2019/</a></p>
+    <p>ISACA. (2018a). <i>COBIT 2019 framework: Introduction and methodology</i>. ISACA. ISBN 978-1-60420-763-7. <a href="https://www.isaca.org/store2/product/CB19FIMP-C">https://www.isaca.org/store2/product/CB19FIMP-C</a></p>
+    <p>ISACA. (2018b). <i>COBIT 2019 framework: Governance and management objectives</i>. ISACA. ISBN 978-1-60420-764-4. <a href="https://www.isaca.org/store2/product/WCB19FGM">https://www.isaca.org/store2/product/WCB19FGM</a></p>
+    <p>ISACA. (2018c, 11 de diciembre). <i>New COBIT 2019 resources help organizations design and implement tailored governance systems for their information and technology</i> [Comunicado de prensa]. <a href="https://www.isaca.org/about-us/newsroom/press-releases/2018/new-cobit-2019-resources-help-organizations-design-and-implement-tailored-governance-systems">https://www.isaca.org/about-us/newsroom/press-releases/2018/new-cobit-2019-resources-help-organizations-design-and-implement-tailored-governance-systems</a></p>
+    <p>Rafeq, A., y Elangovan, N. (2021, 26 de mayo). <i>A systematic approach to implementing a governance system using COBIT 2019: A COVID-19 case study</i>. ISACA. <a href="https://www.isaca.org/resources/news-and-trends/industry-news/2021/a-systematic-approach-to-implementing-a-governance-system-using-cobit-2019">https://www.isaca.org/resources/news-and-trends/industry-news/2021/a-systematic-approach-to-implementing-a-governance-system-using-cobit-2019</a></p>
+    <p>SFIA Foundation. (2020). <i>COBIT 2019 and SFIA skills: Suggested updates incorporating SFIA v7</i> [Documento PDF]. <a href="https://sfia-online.org/es">https://sfia-online.org/es</a></p>
+    <p>Soares, B. H. (2023, 24 de mayo). Improving governance at a national bank with COBIT. <i>ISACA Journal, 3</i>. <a href="https://www.isaca.org/resources/isaca-journal/issues/2023/volume-3/improving-governance-at-a-national-bank-with-cobit">https://www.isaca.org/resources/isaca-journal/issues/2023/volume-3/improving-governance-at-a-national-bank-with-cobit</a></p>
+    <p>White, S. K. (2023, 12 de junio). <i>COBIT, un marco para la alineación y la gobernanza</i>. CIO España. <a href="https://www.cio.com/article/1314368/cobit-un-marco-para-la-alineacion-y-la-gobernanza.html">https://www.cio.com/article/1314368/cobit-un-marco-para-la-alineacion-y-la-gobernanza.html</a></p>
+  </div>
+</section>
+
+</div></div>
+
+<div class="ctrl">
+  <button id="prev" aria-label="Anterior">◀</button>
+  <span id="count">1 / 1</span>
+  <button id="next" aria-label="Siguiente">▶</button>
+  <button id="fs" title="Pantalla completa (F)">⛶</button>
+</div>
+
+<script>
+(function(){
+  // Diagrama de los siete componentes
+  var names=["Procesos","Estructuras organizativas","Flujos y elementos de información","Personas, habilidades y competencias","Principios, políticas y procedimientos","Cultura, ética y comportamiento","Servicios, infraestructura y aplicaciones"];
+  var wheel=document.getElementById('wheel'), svg=document.getElementById('wheelsvg');
+  var cx=300, cy=270, r=215, lines='';
+  names.forEach(function(n,k){
+    var a=(-90+k*360/7)*Math.PI/180, x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+    lines+='<line x1="'+cx+'" y1="'+cy+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#a9d4f5" stroke-width="2"/>';
+    var d=document.createElement('div'); d.className='node'; d.style.left=x+'px'; d.style.top=y+'px';
+    d.innerHTML='<span><i>'+(k+1)+'</i>'+n+'</span>'; wheel.appendChild(d);
+  });
+  svg.innerHTML='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#d6e3ef" stroke-dasharray="6 6"/>'+lines;
+
+  var slides=[].slice.call(document.querySelectorAll('.slide')), i=0, deck=document.getElementById('deck');
+  var total=slides.length;
+  slides.forEach(function(s,k){
+    if(k===0) return;
+    var f=document.createElement('div'); f.className='foot';
+    f.innerHTML='<span>COBIT 2019 · Componentes de los objetivos de gobierno y gestión</span><span>· '+(k+1)+' / '+total+'</span>';
+    s.appendChild(f);
+  });
+  function show(n){
+    i=Math.max(0,Math.min(total-1,n));
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i)});
+    document.getElementById('count').textContent=(i+1)+' / '+total;
+    document.getElementById('bar').style.width=((i+1)/total*100)+'%';
+    try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+  }
+  function fit(){
+    var s=Math.min(window.innerWidth/1300, window.innerHeight/740);
+    deck.style.transform='scale('+s+')';
+  }
+  document.addEventListener('keydown',function(e){
+    if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();show(i+1)}
+    else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();show(i-1)}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(total-1);
+    else if(e.key==='f'||e.key==='F')toggleFs();
+  });
+  function toggleFs(){
+    if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+    else{document.exitFullscreen&&document.exitFullscreen()}
+  }
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('fs').onclick=toggleFs;
+  var tx=null;
+  document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){if(tx===null)return;var d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(i+(d<0?1:-1));tx=null});
+  window.addEventListener('resize',fit);
+  var h=parseInt((location.hash||'').slice(1),10);
+  fit(); show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
